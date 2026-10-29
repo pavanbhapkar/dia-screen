@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+/* ---------- Design tokens: "assay plate" ---------- */
+@theme {
+  --font-sans: "Schibsted Grotesk", ui-sans-serif, system-ui, sans-serif;
+
+  --color-paper: #E8EDF0;   /* cool lab-bench grey-blue background */
+  --color-surface: #F6F8F9; /* empty well / card surface */
+  --color-ink: #14213D;     /* deep navy text */
+  --color-muted: #56657A;   /* secondary text */
+  --color-line: #C5D0D8;    /* hairlines, well outlines */
+  --color-pos: #C2185B;     /* reagent magenta: DIA-positive */
+  --color-neg: #1F7A7A;     /* reagent teal: DIA-negative */
+  --color-warn: #A86300;    /* amber: caution */
+}
+
+html {
+  background: var(--color-paper);
+  color: var(--color-ink);
+}
+
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-pos);
+  outline-offset: 3px;
+}
+
+/* ---------- Plate-reader animation ---------- */
+.well {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: well-in 0.4s ease-out both;
+}
+
+.well-pos {
+  animation: well-in 0.4s ease-out both, well-hit 0.5s ease-out both;
+}
+
+@keyframes well-in {
+  from { opacity: 0; transform: scale(0.3); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes well-hit {
+  from { fill: var(--color-surface); stroke: var(--color-line); }
+  to   { fill: var(--color-pos); stroke: var(--color-pos); }
+}
+
+/* ---------- SHAP bars grow from the centre line ---------- */
+.bar-grow {
+  animation: bar-grow 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@keyframes bar-grow {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* ---------- Plate-reader scan while a molecule is being checked ---------- */
+.scan-well {
+  animation: scan 1.2s ease-in-out infinite;
+}
+
+@keyframes scan {
+  0%, 100% { fill: transparent; }
+  15%      { fill: var(--color-pos); }
+  45%      { fill: transparent; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
